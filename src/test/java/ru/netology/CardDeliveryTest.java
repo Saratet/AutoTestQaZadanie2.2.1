@@ -1,12 +1,10 @@
 package ru.netology;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import java.nio.channels.Selector;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-public class cardDeliveryTest {
+public class CardDeliveryTest {
 
     public String dateGenerator(int days, String pattern){
         return LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern(pattern));
@@ -35,6 +33,7 @@ public class cardDeliveryTest {
         $("[data-test-id='agreement']").click();
         $$(".button").findBy(Condition.exactText("Забронировать")).click();
         $("[data-test-id='notification']").shouldBe(Condition.visible, Duration.ofSeconds(15));
+        $("[data-test-id='notification']").shouldHave(Condition.text(date));
     }
 
 
