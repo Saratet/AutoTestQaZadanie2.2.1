@@ -2,6 +2,7 @@ package ru.netology;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
@@ -9,8 +10,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.*;
 
 public class CardDeliveryTest {
 
@@ -18,12 +18,15 @@ public class CardDeliveryTest {
         return LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern(pattern));
     }
 
+    @BeforeEach
+    void setup() {
+        open("http://localhost:9999");
+    }
     @Test
     void shouldSendFormWithValidData(){
 
         String date = dateGenerator(3, "dd.MM.yyyy");
 
-        Selenide.open("http://localhost:9999");
         $("[data-test-id='city'] input").setValue("Махачкала");
         $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
         $("[data-test-id='date'] input").setValue(date);
@@ -35,9 +38,4 @@ public class CardDeliveryTest {
         $("[data-test-id='notification']").shouldBe(Condition.visible, Duration.ofSeconds(15));
         $("[data-test-id='notification']").shouldHave(Condition.text(date));
     }
-
-
-
-
-
 }
